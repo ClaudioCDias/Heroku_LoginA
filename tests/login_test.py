@@ -1,13 +1,13 @@
 import os
+import time
 import pytest
 from selenium import webdriver
 from pages.login_page import LoginPage
 
-
 @pytest.fixture
 def login(request):
     # variável local para armazenar o caminho do ChromeDriver
-    print('>>> CWD ==' + os.getcwd())
+    print('>>> CWD == ' + os.getcwd())
     _chromedriver = 'vendor/chromedriver.exe'
     # _chromedriver = os.path.join(os.getcwd(), 'vendor', 'chromedriver')
 
@@ -24,10 +24,9 @@ def login(request):
 
     # sinalizando o fim da execução para o ambiente
     request.addfinalizer(quit)
-    return driver_
+    return loginPage
 
     # Como eram os passos do jeito simples
-
 '''
 def old_login_valido(driver):
     driver.get('https://the-internet.herokuapp.com/login')
@@ -42,13 +41,11 @@ def testar_login_com_sucesso(login):
     # validar a mensagem
     assert login.vejo_mensagem_de_sucesso()
 
-
 def testar_login_com_usuario_invalido(login):
     # preencher o usuário, a senha e clicar no botão
     login.com_('asdfgasdfg', 'SuperSecretPassword!')
     # validar a mensagem
     assert login.vejo_mensagem_de_falha()
-
 
 def testar_login_com_senha_invalida(login):
     # preencher o usuário, a senha e clicar no botão
