@@ -1,6 +1,7 @@
 # 1 - Bibliotecas
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage # receber as funções da base_page
+import urllib3
 
 # 2 - Classe
 class LoginPage(BasePage):

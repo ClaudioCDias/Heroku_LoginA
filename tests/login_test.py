@@ -1,7 +1,9 @@
 import os
+import time
 import pytest
 from selenium import webdriver
 from pages.login_page import LoginPage
+import urllib3
 
 @pytest.fixture
 def login(request):
@@ -39,15 +41,18 @@ def testar_login_com_sucesso(login):
     login.com_('tomsmith', 'SuperSecretPassword!')
     # validar a mensagem
     assert login.vejo_mensagem_de_sucesso()
+    time.sleep(2)
 
 def testar_login_com_usuario_invalido(login):
     # preencher o usuário, a senha e clicar no botão
     login.com_('asdfgasdfg', 'SuperSecretPassword!')
     # validar a mensagem
     assert login.vejo_mensagem_de_falha()
+    time.sleep(2)
 
 def testar_login_com_senha_invalida(login):
     # preencher o usuário, a senha e clicar no botão
     login.com_('tomsmith', 'xpto12345')
     # validar a mensagem
     assert login.vejo_mensagem_de_falha()
+    time.sleep(2)
