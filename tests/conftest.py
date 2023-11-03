@@ -1,7 +1,7 @@
 import os
 import pytest
 from selenium import webdriver
-from .import config
+from .import config, credentials
 
 def pytest_addoption(parser):
     parser.addoption(
@@ -53,8 +53,12 @@ def driver(request): # Inicialização dos testes - similar a um Before / Setup
                 'name': test_name
             }
         }
-        _credentials = os.environ['oauth-claudiocdadm-2d380'] + ':' + os.environ['6e87a4a4-a166-422f-95e3-b65f29cb08fd']
-        _url = 'http://' + _credentials + '@ondemand.us-west-1.saucelabs.com:443/wd/hub'
+        # _credentials = os.environ['oauth-claudiocdadm-2d380'] + ':' + os.environ['6e87a4a4-a166-422f-95e3-b65f29cb08fd']
+
+        _credentials = credentials.SAUCE_USERNAME + ':' + credentials.SAUCE_ACCESS_KEY
+        _url = 'https://' + _credentials + '@ondemand.us-west-1.saucelabs.com:443/wd/hub'
+        # _url = 'https://oauth-claudiocdadm-2d380:6e87a4a4-a166-422f-95e3-b65f29cb08fd@ondemand.us-west-1.saucelabs.com:443/wd/hub'
+
         driver_ = webdriver.Remote(_url, capabilities)
     else: # execução local / localhost
         if config.browser == 'chrome':
