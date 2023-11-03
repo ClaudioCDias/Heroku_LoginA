@@ -3,6 +3,9 @@ import pytest
 from selenium import webdriver
 from .import config
 
+
+
+
 def pytest_addoption(parser):
     parser.addoption(
         '--baseurl',
@@ -36,7 +39,7 @@ def pytest_addoption(parser):
     )
 
 @pytest.fixture
-def driver(request):
+def driver(request): # Inicialização dos testes - similar a um Before / Setup
     config.baseurl = request.config.getoption('--baseurl')
     config.host = request.config.getoption('--host')
     config.browser = request.config.getoption('--browser')
@@ -69,3 +72,21 @@ def driver(request):
                 driver_ = webdriver.Firefox(_geckodriver)
             else:
                 driver_ = webdriver.Firefox()
+
+    def quit(): # Finalização dos testes - similar ao After ou Teardown
+        # sinalização de passou ou falhou conforme o retorno da requisição
+        sauce_result = 'failed' if request.node.rep_call.failed else 'passed'
+        driver_.execute_script('sauce:job-result={}'.format(sauce_result))
+        driver_.quit()
+
+    request.addfinalizer(quit)
+    return driver_
+
+@pytest.hookimpl(hookwrapper=True, tryfirst=True) # Implementação do gatilho de comunicação com SL
+def pytest_runtest_makereport(item, call):
+    # parametros para geração do relatório / informações dos resultados
+    outcome = yield
+    rep = outcome.get_result()
+
+    # definir atributos para o relatório
+    setattr(item, 'rep_' + rep.when, rep)
