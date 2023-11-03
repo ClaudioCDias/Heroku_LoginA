@@ -3,9 +3,6 @@ import pytest
 from selenium import webdriver
 from .import config
 
-
-
-
 def pytest_addoption(parser):
     parser.addoption(
         '--baseurl',
